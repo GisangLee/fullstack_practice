@@ -14,10 +14,21 @@ class CustomUserAdmin(UserAdmin):
     """
 
     # 장고에서 지원하는 UserAdmin을 확장시켜 커스텀화 하는 과정
+
+    list_display = UserAdmin.list_display + ("birthdate",)
+
     fieldsets = UserAdmin.fieldsets + (
         ("Custom Profile",
             {
-                "fields": ("avatar", "gender", "bio", "birthdatae", "language", "currency", "superhost")
+                "fields": (
+                    "avatar",
+                    "gender",
+                    "bio",
+                    "birthdate",
+                    "language",
+                    "currency",
+                    "superhost"
+                )
             }
         ),
     )
