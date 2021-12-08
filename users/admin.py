@@ -15,7 +15,20 @@ class CustomUserAdmin(UserAdmin):
 
     # 장고에서 지원하는 UserAdmin을 확장시켜 커스텀화 하는 과정
 
-    list_display = UserAdmin.list_display + ("birthdate",)
+    list_filter = UserAdmin.list_filter + ("superhost",)
+
+    list_display = (
+        "username",
+        "first_name",
+        "last_name",
+        "email",
+        "is_active",
+        "language",
+        "currency",
+        "superhost",
+        "is_staff",
+        "is_superuser",
+    )
 
     fieldsets = UserAdmin.fieldsets + (
         ("Custom Profile",

@@ -5,7 +5,14 @@ from . import models
 @admin.register(models.RoomType, models.Amenity, models.Facilitiy, models.HouseRule)
 class ItemAdmin(admin.ModelAdmin):
     """ 건물 형태, 편의 시설, 숙박 예의, 숙박 규칙 Definition """
-    pass
+
+    list_display = (
+        "name",
+        "used_by",
+    )
+    
+    def used_by(self, obj):
+        return obj.rooms.count()
 
 
 @admin.register(models.Room)
@@ -27,6 +34,8 @@ class RoomAdmin(admin.ModelAdmin):
         "guests",
         "instant_book",
         "count_amenities",
+        "count_photos",
+        "total_rating",
     )
 
     ordering = ("room_name", "price",)
@@ -76,7 +85,10 @@ class RoomAdmin(admin.ModelAdmin):
     )
 
     def count_amenities(self, obj):
-        return "Potato"
+        return obj.amenities.count()
+
+    def count_photos(self, obj):
+        return obj.photos.count()
 
 
 @admin.register(models.Photo)

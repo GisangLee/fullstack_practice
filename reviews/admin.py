@@ -6,4 +6,6 @@ from . import models
 class RegisterAdmin(admin.ModelAdmin):
 
     """ 후기 Admin Definition """
-    list_display = admin.ModelAdmin.list_display + ("user", "room",)
+    list_display = admin.ModelAdmin.list_display + ("rating_avg",)
+
+    
