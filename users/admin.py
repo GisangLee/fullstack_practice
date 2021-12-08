@@ -1,9 +1,30 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from . import models
 
 # Register your models here.
 
 
 @admin.register(models.User)
-class CustomUserAdmin(admin.ModelAdmin):
-    pass
+class CustomUserAdmin(UserAdmin):
+
+    """ Custom User Admin
+    list_display = ("username", "email", "gender", "language", "currency", "superhost")
+    list_filter = ("superhost", "language", "currency",)
+    """
+
+    # 장고에서 지원하는 UserAdmin을 확장시켜 커스텀화 하는 과정
+    fieldsets = UserAdmin.fieldsets + (
+        ("Custom Profile",
+            {
+                "fields": ("avatar", "gender", "bio", "birthdatae", "language", "currency", "superhost")
+            }
+        ),
+    )
+
+
+
+
+""" Custom Model Admin을 만드는 또 하나의 방법. 데코레이터를 사용하는 방법과 아래와 같은 방법이 있다.
+admin.site.register(models.User, CustoemUserAdmin)
+"""
