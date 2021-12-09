@@ -48,5 +48,6 @@ class Review(core_models.TimeStampModel):
     def send_pricesatisfaction(self):
         return self.pricesatisfaction
     
+    # Admin 열제목 바꾸기
     rating_avg.short_description = "Rating Average"
     

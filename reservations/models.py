@@ -27,6 +27,8 @@ class Reservation(core_models.TimeStampModel):
     def __str__(self):
         return f"{self.room} - {self.check_in}"
 
+    # 모델안에 함수를 적는 이유 > Admin말고 프론트엔드에서도 사용할 것이라서
+
     def is_progress(self):
         now = timezone.now().date()
         return now > self.check_in and now < self.check_out

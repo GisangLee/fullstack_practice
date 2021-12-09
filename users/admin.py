@@ -1,8 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from . import models
+from rooms import models as room_models
 
 # Register your models here.
+
+
+class UserInline(admin.TabularInline):
+    model = room_models.Room
 
 
 @admin.register(models.User)
@@ -14,6 +19,8 @@ class CustomUserAdmin(UserAdmin):
     """
 
     # 장고에서 지원하는 UserAdmin을 확장시켜 커스텀화 하는 과정
+
+    inlines = (UserInline,)
 
     list_filter = UserAdmin.list_filter + ("superhost",)
 

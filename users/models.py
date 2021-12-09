@@ -37,7 +37,7 @@ class User(AbstractUser):
     )
     """===================="""
 
-    avatar = models.ImageField(blank=True)
+    avatar = models.ImageField(upload_to="user_profile", blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
     bio = models.TextField(blank=True)
     birthdate = models.DateField(blank=True, null=True)
