@@ -4,11 +4,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> {% block page_name %}{% endblock page_name %} | Practice</title>
+    <title> {% block page_title %}{% endblock page_title %} | Practice</title>
   </head>
   <body>
 
-    {% include "partials/header.html" %}
+    <header>
+      {% include "partials/nav.html" %}
+
+      {% block search_bar %}
+        <form method="get" action="{% url 'rooms:search' %}">
+          <input name="city" placeholder="어디로 여행가세요?"/>
+        </form>
+      {% endblock search_bar %}
+
+    </header>
+
 
     {% block content %}
     {% endblock %}

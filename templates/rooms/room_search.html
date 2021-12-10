@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    Search
+{% endblock page_title %}
+
+
+<!-- base.html의 search_bar를 숨기는 용도 -->
+<!-- Django에서 무언가를 숨길 때 사용하는 기법 -->
+{% block search_bar %}
+{% endblock search_bar %}
+
+{% block content %}
+    <form method="get" action="{% url 'rooms:search' %}">
+
+        <!-- Django Form API를 사용한 숙소 검색 -->
+
+        {{form.as_p}}
+
+        <!-- DJango Form API를 사용하지 않은 방법의 숙소 검색  -->
+        <!-- <div>
+            <label for="city">도시</label>
+            <input  id="city" value="{{city}}" name="city" placeholder="어디로 여행가세요?"/>
+        </div>
+            
+        <div>
+            <label for="country">나라</label>
+            <select id="country" name="country">
+                {% for country in countries %}
+                    <option value="{{country.code}}" {% if country.code == selected_country %}selected{% endif %}>{{country.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+                    
+        <div>
+            <label for="room_type">숙소 유형</label>
+            <select id="room_type" name="room_type">
+                {% for room_type in room_types %}
+                    <option value="{{room_type.pk}}" {% if selected_room_type == room_type.pk %}selected{% endif %}>{{room_type.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="price">숙박 가격</label>
+            <input value="{{price}}" type="number" name="price" id="price" placeholder="지갑에 돈 좀 있으세요?"/>
+        </div>
+
+        <div>
+            <label for="guests">게스트</label>
+            <input value="{{guests}}" type="number" name="guests" id="guests" placeholder="게스트"/>
+        </div>
+
+        <div>
+            <label for="beds">침대</label>
+            <input value="{{beds}}" type="number" name="beds" id="beds" placeholder="침대"/>
+        </div>
+
+        <div>
+            <label for="bedrooms">침실</label>
+            <input value="{{bedrooms}}" type="number" name="bedrooms" id="bedrooms" placeholder="침실"/>
+        </div>
+
+        <div>
+            <label for="baths">화장실</label>
+            <input value="{{baths}}" type="number" name="baths" id="baths" placeholder="화장실"/>
+        </div>
+
+        <div>
+            <label for="instant">즉석 예약</label>
+            <input type="checkbox" name="instant" id="instant" {% if instant %}checked{% endif %} />
+        </div>
+
+        <div>
+            <label for="super_host">즉석 예약</label>
+            <input type="checkbox" name="super_host" id="super_host" {% if super_host %}checked{% endif %} />
+        </div>
+
+        <div>
+            <h3 for="amenities">편의시설</h3>
+            <ul>
+                {% for amenity in amenities %}
+                    <li>
+                        <label for="a_{{amenity.pk}}">{{amenity.name}}</label>
+                        <input
+                            id="a_{{amenity.pk}}"
+                            name="amenities"
+                            type="checkbox"
+                            value="{{amenity.pk}}"
+                            {% if amenity.pk|slugify in selected_amenities %}checked{% endif %} 
+                            />
+                    </li>
+                {% endfor %}
+            </ul> -->
+            <!-- amenity.pk|slugify 는 모든 것을 string으로 바꿔준다.-->
+        <!-- </div>
+
+        <div>
+            <h3 for="facilities">숙박시설</h3>
+            <ul>
+                {% for facility in facilities %}
+                    <li>
+                        <label for="f_{{facility.pk}}">{{facility.name}}</label>
+                        <input
+                            id="f_{{facility.pk}}"
+                            name="facilities"
+                            type="checkbox"
+                            value="{{facility.pk}}"
+                            {% if facility.pk|slugify in selected_facilities %}checked{% endif %}
+                        />
+                    </li>
+                {% endfor %}
+            </ul>
+        </div> -->
+
+        <button>검색</button> 
+    </form>
+            
+{% endblock content %}
