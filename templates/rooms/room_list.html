@@ -6,11 +6,12 @@
 
 {% block content %}
     {% for room in rooms %}
-        <h1>{{room.room_name}}</h1>
+        <h1>
+            <a href="{% url 'rooms:room_detail' room.pk %}">{{room.room_name}}</a>
+        </h1>
     {% endfor %}
 
     <h4>
-        {{now}}
         {% if page_obj.has_previous %}
             <a href="?page={{page_obj.previous_page_number}}">Previous</a>
         {% endif %}

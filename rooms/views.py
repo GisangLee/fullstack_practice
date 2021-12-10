@@ -1,7 +1,7 @@
 # from math import ceil
 from django.views.generic import ListView
 from django.utils import timezone
-# from django.shortcuts import render, redirect
+from django.shortcuts import render
 # from django.core.paginator import EmptyPage, Paginator
 from rooms import models as room_models
 
@@ -16,10 +16,10 @@ class HomeView(ListView):
     paginate_orphans = 5
     context_object_name = "rooms"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["now"] = timezone.now()
-        return context
+
+def room_detail(request, pk):
+    print(pk)
+    return render(request, "rooms/room_detail.html")
 
 #def show_all_rooms(request):
     """ DJango 의 Paginator를 이용한 페지네이션
