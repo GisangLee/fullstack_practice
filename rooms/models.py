@@ -65,7 +65,6 @@ class Room(core_models.TimeStampModel):
        related_name 은 외래키의 대상이(예를 들어 여러 숙박시설은 한 명의 호스트를 갖을 때, 그 호스트를 말함) 외래키 정보에 접근할 때 사용
     """
     host = models.ForeignKey(user_models.User, related_name="rooms", on_delete=models.CASCADE)
-
     roomtype = models.ForeignKey(RoomType, related_name="rooms", on_delete=models.SET_NULL, null=True)
     amenities = models.ManyToManyField(Amenity, related_name="rooms", blank=True)
     facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
@@ -88,50 +87,63 @@ class Room(core_models.TimeStampModel):
         if len(all_reviews) > 0:
             for review in all_reviews:
                 all_ratings += review.rating_avg()
-            return all_ratings / len(all_reviews)
+            return round(all_ratings / len(all_reviews), 2)
         return 0
 
     def cleanliness_avg(self):
         all_cleanliness = self.reviews.all()
         cleanliness_rating = 0
-        for single_cleanliness in all_cleanliness:
-            cleanliness_rating += single_cleanliness.send_cleanliness()
-        return cleanliness_rating / len(all_cleanliness)
-
+        if len(all_cleanliness) > 0:
+            for single_cleanliness in all_cleanliness:
+                cleanliness_rating += single_cleanliness.send_cleanliness()
+            return round(cleanliness_rating / len(all_cleanliness), 2)
+        return 0
+            
     def location_avg(self):
         all_location = self.reviews.all()
         location_rating = 0
-        for single_location in all_location:
-            location_rating += single_location.send_location()
-        return location_rating / len(all_location)
-
+        if len(all_location) > 0:
+            for single_location in all_location:
+                location_rating += single_location.send_location()
+            return round(location_rating / len(all_location), 2)
+        return 0
+            
     def accuray_avg(self):
         all_accuracy = self.reviews.all()
         accuracy_rating = 0
-        for single_accuracy in all_accuracy:
-            accuracy_rating += single_accuracy.send_accuracy()
-        return accuracy_rating / len(all_accuracy)
-
+        if len(all_accuracy) > 0:
+            for single_accuracy in all_accuracy:
+                accuracy_rating += single_accuracy.send_accuracy()
+            return round(accuracy_rating / len(all_accuracy), 2)
+        return 0
+            
     def check_in_avg(self):
         all_check_in = self.reviews.all()
         check_in_rating = 0
-        for check_in_accuracy in all_check_in:
-            check_in_rating += check_in_accuracy.send_check_in()
-        return check_in_rating / len(all_check_in)
-
+        if len(all_check_in) > 0:
+            for check_in_accuracy in all_check_in:
+                check_in_rating += check_in_accuracy.send_check_in()
+            return round(check_in_rating / len(all_check_in), 2)
+        return 0
+            
     def communication_avg(self):
         all_communication = self.reviews.all()
         communication_rating = 0
-        for single_communication in all_communication:
-            communication_rating += single_communication.send_communication()
-        return communication_rating / len(all_communication)
-    
+        if len(all_communication) > 0:
+            for single_communication in all_communication:
+                communication_rating += single_communication.send_communication()
+            return round(communication_rating / len(all_communication), 2)
+        return 0
+            
     def pricesatisfaction_avg(self):
         all_pricesatisfaction = self.reviews.all()
         pricesatisfaction_rating = 0
-        for single_pricesatisfaction in all_pricesatisfaction:
-            pricesatisfaction_rating += single_pricesatisfaction.send_pricesatisfaction()
-        return pricesatisfaction_rating / len(all_pricesatisfaction)
+        if len(all_pricesatisfaction) > 0:
+            for single_pricesatisfaction in all_pricesatisfaction:
+                pricesatisfaction_rating += single_pricesatisfaction.send_pricesatisfaction()
+            return round(pricesatisfaction_rating / len(all_pricesatisfaction), 2)
+        return 0
+            
 
         
 # 룸 사진
