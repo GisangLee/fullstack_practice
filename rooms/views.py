@@ -1,7 +1,8 @@
 # from math import ceil
-from django.views.generic import ListView
-from django.utils import timezone
-from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+from django.urls import reverse
+# from django.http import Http404
+# from django.shortcuts import redirect, render
 # from django.core.paginator import EmptyPage, Paginator
 from rooms import models as room_models
 
@@ -17,12 +18,32 @@ class HomeView(ListView):
     context_object_name = "rooms"
 
 
+""" CBV방식의 숙박 보여주기 방식"""
+
+
+class RoomDetail(DetailView):
+    model = room_models.Room
+
+
+
+
+""" FBV 방식의 숙박 보여구기 방식
 def room_detail(request, pk):
-    print(pk)
-    return render(request, "rooms/room_detail.html")
+    try:
+        room = room_models.Room.objects.get(pk=pk)
+        return render(
+            request,
+            "rooms/room_detail.html",
+            context={"room": room}
+        )
+    except room_models.Room.DoesNotExist:
+        raise Http404()
+"""
+
+
 
 #def show_all_rooms(request):
-    """ DJango 의 Paginator를 이용한 페지네이션
+""" DJango 의 Paginator를 이용한 페지네이션
 
     page = request.GET.get("page", 1)
     room_list = room_models.Room.objects.all()
@@ -39,12 +60,12 @@ def room_detail(request, pk):
         )
     except EmptyPage:
         return redirect("/")
-    """
+"""
 
 
 
 
-    """ 오직 Python을 활용한 페지네이션
+""" 오직 Python을 활용한 페지네이션
     
     page = request.GET.get("page", 1)
     page = int(page or 1)
@@ -64,4 +85,4 @@ def room_detail(request, pk):
             "page_range": range(1, page_conut)
         }
     )
-    """
+"""
