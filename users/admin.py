@@ -54,8 +54,6 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
-
-
 """ Custom Model Admin을 만드는 또 하나의 방법. 데코레이터를 사용하는 방법과 아래와 같은 방법이 있다.
 admin.site.register(models.User, CustoemUserAdmin)
 """
