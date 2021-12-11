@@ -1,4 +1,14 @@
 <a href=" {% url 'core:home' %}">Practice</a>
 <ul>
-  <li><a href="#">로그인</a></li>
+
+  
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'users:logout' %}">로그아웃</a></li>  
+
+  
+  {% else %}
+    <li><a href="{% url 'users:login' %}">로그인</a></li>
+
+  {% endif %}
+    
 </ul>

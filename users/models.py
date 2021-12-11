@@ -37,6 +37,7 @@ class User(AbstractUser):
     )
     """===================="""
 
+    email = models.EmailField(max_length=255, unique=True, blank=True)
     avatar = models.ImageField(upload_to="user_profile", blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
     bio = models.TextField(blank=True)
@@ -44,3 +45,7 @@ class User(AbstractUser):
     language = models.CharField(choices=LANGUAGE_CHOICES, max_length=2, blank=True)
     currency = models.CharField(choices=CURRENCY_CHOICES, max_length=3, blank=True)
     superhost = models.BooleanField(default=False)
+
+    USERNAME_FIELD = "email"
+
+    REQUIRED_FIELDS = ["username"]

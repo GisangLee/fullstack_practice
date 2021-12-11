@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+로그인
+{% endblock page_title %}
+
+{% block search_bar %}
+{% endblock search_bar %}
+
+{% block content %}
+    <form method="post" action="{% url 'users:login' %}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button>로그인</button>
+    </form>
+{% endblock content %}
