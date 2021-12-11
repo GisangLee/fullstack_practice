@@ -115,5 +115,23 @@
 
         <button>검색</button> 
     </form>
+
+    {% for room in rooms %}
+        <a href="{% url 'rooms:room_detail' room.pk %}">
+            <h3>{{room.address}}</h3>
+        </a>
+    {% endfor %}
+
+    <h4>
+        {% if rooms.has_previous %}
+            <a href="{{current_url}}&page={{rooms.previous_page_number}}">이전</a>
+        {% endif %}
+    
+        Page {{rooms.number}} of {{rooms.paginator.num_pages}}
+    
+        {% if rooms.has_next %}
+            <a href="{{current_url}}&page={{rooms.next_page_number}}">다음</a>
+        {% endif %}
+    </h4>
             
 {% endblock content %}

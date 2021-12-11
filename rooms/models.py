@@ -150,7 +150,6 @@ class Room(core_models.TimeStampModel):
             return round(pricesatisfaction_rating / len(all_pricesatisfaction), 2)
         return 0
             
-
         
 # 룸 사진
 class Photo(core_models.TimeStampModel):
