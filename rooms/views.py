@@ -85,7 +85,6 @@ class SearchView(View):
                 else:
                     filter_args["country"] = country
                                     
-
                 if room_type is not None:
                     filter_args["roomtype"] = room_type
 
@@ -145,7 +144,6 @@ class SearchView(View):
                 "current_url": current_url,
             }
         )
-
 
 
 """ Django Form API를 사용한 숙소 검색 

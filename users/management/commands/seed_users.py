@@ -17,6 +17,8 @@ class Command(BaseCommand):
             "is_staff": False,
             "is_superuser": False,
             "language": "kr",
+            "eamil_verified": False,
+            "email_secret": "",
         })
         seeder.execute()
         self.stdout.write(self.style.SUCCESS(f"{number} of users Created"))
