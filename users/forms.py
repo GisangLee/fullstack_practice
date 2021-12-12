@@ -1,11 +1,12 @@
 from django import forms
+from django.forms import widgets
 from . import models as user_models
 
 
 class LoginForm(forms.Form):
 
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(label="이메일")
+    password = forms.CharField(widget=forms.PasswordInput, label="비밀번호")
 
 # 데이터 필드를 확인하고 싶으면 메서드 이름앞에 clean_을 넣어야 한다.
 # clean으로 시작하는 메서드는 에러를 넣는 것뿐만 아니라 데이터도 정리해준다.
@@ -26,9 +27,8 @@ class LoginForm(forms.Form):
 
 class SignUpForm(forms.Form):
 
-    last_name = forms.CharField(max_length=40, label="성")
-    first_name = forms.CharField(max_length=40, label="이름")
     email = forms.EmailField(max_length=255, label="이메일")
+    first_name = forms.CharField(max_length=10, label="닉네임")
     password = forms.CharField(widget=forms.PasswordInput, label="비밀번호")
     password1 = forms.CharField(widget=forms.PasswordInput, label="비밀번호 확인")
 
@@ -51,10 +51,8 @@ class SignUpForm(forms.Form):
 
     def save(self):     
         first_name = self.cleaned_data.get("first_name")
-        last_name = self.cleaned_data.get("last_name")
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
         user = user_models.User.objects.create_user(email, email, password)
         user.first_name = first_name
-        user.last_name = last_name
         user.save()
