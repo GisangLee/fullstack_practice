@@ -42,6 +42,19 @@ class User(AbstractUser):
     )
     """===================="""
 
+    """ 로그인 방식 선택 상자 """
+    LOGIN_EMAIL = "email"
+    LOGIN_GH = "github"
+    LOGIN_KAKAO = "kakao"
+
+    LOGIN_CHOICES = (
+        (LOGIN_EMAIL, "Email"),
+        (LOGIN_GH, "Github"),
+        (LOGIN_KAKAO, "Kakao"),
+    )
+
+    """======================="""
+
     email = models.EmailField(max_length=255, blank=True, unique=True)
     avatar = models.ImageField(upload_to="user_profile", blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
@@ -52,6 +65,7 @@ class User(AbstractUser):
     superhost = models.BooleanField(default=False)
     eamil_verified = models.BooleanField(default=False)
     email_secret = models.CharField(max_length=120, default="", blank=True)
+    login_method = models.CharField(max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
 
     USERNAME_FIELD = "email"
 

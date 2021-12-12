@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
 
     inlines = (UserInline,)
 
-    list_filter = UserAdmin.list_filter + ("superhost",)
+    list_filter = UserAdmin.list_filter + ("superhost", "login_method",)
 
     list_display = (
         "username",
@@ -36,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_superuser",
         "eamil_verified",
-        "email_secret",
+        "login_method",
     )
 
     fieldsets = UserAdmin.fieldsets + (
