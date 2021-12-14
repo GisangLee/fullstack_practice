@@ -1,14 +1,15 @@
-<a href=" {% url 'core:home' %}">Practice</a>
-<ul>
-
-  
+<ul class="flex items-center text-sm font-semibold h-full">
   {% if user.is_authenticated %}
-    <li><a href="{% url 'users:logout' %}">로그아웃</a></li>  
-
-  
+    <li class="nav_link">
+      <a href="{% url 'users:logout' %}">로그아웃</a>
+    </li>    
   {% else %}
-    <li><a href="{% url 'users:login' %}">로그인</a></li>
-    <li><a href="{% url 'users:signup' %}">회원가입</a></li>
+    <li class="nav_link">
+      <a href="{% url 'users:login' %}">로그인</a>
+    </li>
+    <li class="nav_link">
+      <a href="{% url 'users:signup' %}">회원가입</a>
+    </li>
 
   {% endif %}
     

@@ -149,7 +149,11 @@ class Room(core_models.TimeStampModel):
                 pricesatisfaction_rating += single_pricesatisfaction.send_pricesatisfaction()
             return round(pricesatisfaction_rating / len(all_pricesatisfaction), 2)
         return 0
-            
+    
+    def get_first_photo(self):
+        photo, = self.photos.all()[:1]
+        photo_url = photo.file.url
+        return photo_url
         
 # 룸 사진
 class Photo(core_models.TimeStampModel):
