@@ -17,3 +17,29 @@
 
 }
 
+.btn{
+    @apply w-full font-bold text-center rounded-xl py-4 mb-4;
+}
+
+input{
+    @apply w-full font-bold text-center rounded-xl py-4 mb-4 border border-gray-400;
+    &:focus{
+        @apply outline-none border-indigo-600;
+    }
+}
+
+form{
+    .input{
+        @apply mb-3;
+        &.has_error{
+            input{
+                @apply bg-red-300 border-gray-400;
+                :focus{
+                    @apply border-gray-400;
+                }
+            }
+        }
+    }
+    
+}
+

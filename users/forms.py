@@ -1,12 +1,24 @@
 from django import forms
-from django.forms import widgets
 from . import models as user_models
 
 
 class LoginForm(forms.Form):
 
-    email = forms.EmailField(label="이메일")
-    password = forms.CharField(widget=forms.PasswordInput, label="비밀번호")
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "이메일"
+            }
+        )
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "비밀번호"
+            }
+        )
+    )
 
 # 데이터 필드를 확인하고 싶으면 메서드 이름앞에 clean_을 넣어야 한다.
 # clean으로 시작하는 메서드는 에러를 넣는 것뿐만 아니라 데이터도 정리해준다.
@@ -27,10 +39,35 @@ class LoginForm(forms.Form):
 
 class SignUpForm(forms.Form):
 
-    email = forms.EmailField(max_length=255, label="이메일")
-    first_name = forms.CharField(max_length=10, label="닉네임")
-    password = forms.CharField(widget=forms.PasswordInput, label="비밀번호")
-    password1 = forms.CharField(widget=forms.PasswordInput, label="비밀번호 확인")
+    email = forms.EmailField(
+        max_length=255,
+        widget=forms.EmailInput(
+            attrs={"placeholder": "이메일"},
+        )
+    )
+
+    first_name = forms.CharField(
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={"placeholder": "닉네임"},
+        )
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "비밀번호"
+            }
+        )
+    )
+
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "비밀번호 확인"
+            }
+        )
+    )
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
