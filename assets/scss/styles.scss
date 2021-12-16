@@ -21,6 +21,10 @@
     @apply w-full font-bold text-center rounded-xl py-4 mb-4;
 }
 
+.btn-link{
+    @apply text-center py-3 rounded-lg font-light text-lg w-full text-white bg-red-500;
+}
+
 input{
     @apply w-full font-bold text-center rounded-xl py-4 mb-4 border border-gray-400;
     &:focus{
@@ -41,5 +45,41 @@ form{
         }
     }
     
+}
+
+@keyframes messageFadeIn{
+    0%{
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    5%{
+        opacity: 1;
+        transform: translateY(50px);
+    }
+    95%{
+        opacity: 1;
+        transform: translateY(50px);
+    }
+    100%{
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+.message{
+    animation: messageFadeIn 3s ease-in-out forwards;
+    &.error{
+        @apply bg-red-600;
+    }
+    &.info{
+        @apply bg-blue-400;
+    }
+    &.success{
+        @apply bg-green-500;
+    }
+    &.warning{
+
+        @apply bg-yellow-400;
+    }
 }
 

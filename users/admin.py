@@ -36,7 +36,6 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_superuser",
         "eamil_verified",
-        "login_method",
     )
 
     fieldsets = UserAdmin.fieldsets + (
@@ -49,7 +48,8 @@ class CustomUserAdmin(UserAdmin):
                     "birthdate",
                     "language",
                     "currency",
-                    "superhost"
+                    "superhost",
+                    "login_method",
                 )
             }
         ),

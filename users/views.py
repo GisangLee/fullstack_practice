@@ -1,7 +1,9 @@
 import os
+from re import template
 import requests
 from django.views import View
-from django.views.generic import FormView
+from django.contrib import messages
+from django.views.generic import FormView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
@@ -47,6 +49,7 @@ class LoginView(View):
 
 
 def log_out(request):
+    messages.info(request, "안녕히가세요~")
     logout(request)
     return redirect(reverse("core:home"))
 
@@ -115,7 +118,7 @@ def github_callback(request):
             error = json_access_token.get("error", None)
 
             if error is not None:
-                raise GithubException()
+                raise GithubException("깃허브 접급 Token이 존재하지 않습니다.")
             else:
                 access_token = json_access_token.get("access_token")
                 profile_request = requests.get(
@@ -146,28 +149,29 @@ def github_callback(request):
                         user = user_models.User.objects.get(email=email)
 
                         if user.login_method != user_models.User.LOGIN_GH:
-                            raise GithubException()
+                            raise GithubException(f"{user.login_method} 계정으로 로그인하세요.")
 
                     except user_models.User.DoesNotExist:
                         user = user_models.User.objects.create(
+                            username=email,
                             email=email,
                             first_name=name,
                             bio=bio,
-                            username=email,
                             login_method=user_models.User.LOGIN_GH,
                             eamil_verified=True,
                         )
                         user.set_unusable_password()
                         user.save()
+                    messages.success(request, f"{user.first_name}님, 환영합니다~")
                     login(request, user)
                     return redirect(reverse("core:home"))
                         
                 else:
-                    raise GithubException()
+                    raise GithubException("사용자 정보가 존재하지 않습니다.")
         else:
-            return GithubException()
-    except GithubException:
-        # Todo send error msg
+            return GithubException("깃허브 인증 코드를 불러올 수 없습니다.")
+    except GithubException as error:
+        messages.error(request, error)
         return redirect(reverse("users:login"))
 
 
@@ -195,7 +199,7 @@ def kakao_callback(request):
         error = token_response_json.get("error", None)
 
         if error is not None:
-            raise KakaoException()
+            raise KakaoException("카카오 인증 코드를 불러올 수 없습니다.")
 
         access_token = token_response_json.get("access_token")
         profile_request = requests.get(
@@ -206,7 +210,7 @@ def kakao_callback(request):
         email = profile_json.get("kakao_account").get("email", None)
 
         if email is None:
-            raise KakaoException()
+            raise KakaoException("카카오 계정 이메일이 존재하지 않습니다.")
 
         properties = profile_json.get("properties")
 
@@ -220,7 +224,7 @@ def kakao_callback(request):
         try:
             user = user_models.User.objects.get(email=email)
             if user.login_method != user_models.User.LOGIN_KAKAO:
-                raise KakaoException()
+                raise KakaoException(f"{user.login_method} 계정으로 로그인하세요. ")
 
         except user_models.User.DoesNotExist:
             user = user_models.User.objects.create(
@@ -239,8 +243,33 @@ def kakao_callback(request):
                     f"{nickname}-avatar",
                     ContentFile(photo_request.content)
                 )
+        messages.success(request, f"{user.first_name}님, 환영합니다~")
         login(request, user)
         return redirect(reverse("core:home"))
 
-    except KakaoException:
+    except KakaoException as error:
+        messages.error(request, error)
         return redirect(reverse("users:login"))
+
+
+class UserProfileView(DetailView):
+    model = user_models.User
+    context_object_name = "user_obj"
+
+
+class UpdateUserProfile(UpdateView):
+    model = user_models.User
+    template_name = "users/update_profile.html"
+    fields = (
+        "first_name",
+        "last_name",
+        "avatar",
+        "gender",
+        "bio",
+        "language",
+        "currency",
+    )
+
+    def get_object(self, queryset=None):
+
+        return self.request.user

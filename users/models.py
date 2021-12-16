@@ -5,6 +5,7 @@ from django.db import models
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
+from django.shortcuts import reverse
 
 
 class User(AbstractUser):
@@ -70,6 +71,9 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
 
     REQUIRED_FIELDS = ["username"]
+
+    def get_absolute_url(self):
+        return reverse("users:profile", kwargs={"pk": self.pk})
 
     def verify_email(self):
         if self.eamil_verified is False:
