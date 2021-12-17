@@ -1,18 +1,19 @@
 import os
-from re import template
 import requests
 from django.views import View
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import FormView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
-from . import forms
-from users import models as user_models
+from . import forms, mixins
+from . import models as user_models
 
 
-class LoginView(View):
+class LoginView(mixins.LoggeOutOnlyView, View):
 
     def get(self, request):
 
@@ -257,19 +258,39 @@ class UserProfileView(DetailView):
     context_object_name = "user_obj"
 
 
-class UpdateUserProfile(UpdateView):
+class UpdateUserProfile(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
     model = user_models.User
     template_name = "users/update_profile.html"
     fields = (
         "first_name",
-        "last_name",
-        "avatar",
         "gender",
         "bio",
         "language",
         "currency",
     )
+    success_message = "프로필 수정 완료"
 
     def get_object(self, queryset=None):
 
         return self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["first_name"].widget.attrs = {"placeholder": "닉네임"}
+        form.fields["bio"].widget.attrs = {"placeholder": "자신을 소개하세요"}
+        return form
+
+
+class UpdatePassword(mixins.LoggedInOnlyView, SuccessMessageMixin, PasswordChangeView):
+    template_name = "users/update_password.html"
+    success_message = "비밀번호 변경 완료"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {"placeholder": "기존 비밀번호"}
+        form.fields["new_password1"].widget.attrs = {"placeholder": "새 비밀번호"}
+        form.fields["new_password2"].widget.attrs = {"placeholder": "새 비밀번호 확인"}
+        return form
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()

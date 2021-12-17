@@ -13,5 +13,6 @@ urlpatterns = [
     path("signup/", views.SignUpView.as_view(), name="signup"),
     path("verify/<str:secret>/", views.complete_verification, name="complete-verificaiton"),
     path("update-profile/", views.UpdateUserProfile.as_view(), name="update-profile"),
+    path("update-password/", views.UpdatePassword.as_view(), name="update-password"),
     path("<int:pk>/", views.UserProfileView.as_view(), name="profile"),
 ]

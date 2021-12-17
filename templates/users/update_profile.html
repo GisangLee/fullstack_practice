@@ -12,8 +12,15 @@
 
         {% include 'mixins/auth/auth_form.html' with form=form cta="수정하기"%}
 
-        <div class="flex items-center mt-4 mb-3">
-            <a href="{% url 'users:signup' %}" class="text-teal-700 font-bold">비밀번호 변경</a>
-        </div>
+
+        
+        {% if object.login_method == "email" %}
+        
+                <div class="flex items-center mt-4 mb-3">
+                    <a href="{% url 'users:update-password' %}" class="text-teal-700 font-bold">비밀번호 변경</a>
+                </div>
+            
+        {% endif %}
+            
     </div>
 {% endblock content %}
