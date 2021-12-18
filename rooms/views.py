@@ -1,13 +1,15 @@
 # from math import ceil
 # from django.http import Http404
+from django.http.response import Http404
 from django.shortcuts import redirect, render
-from django.views.generic import DetailView, ListView, View
+from django.views.generic import DetailView, ListView, View, UpdateView
 from django.core.paginator import Paginator
 # from django.urls import reverse
 # from django_countries import countries
 # from django.core.paginator import EmptyPage, Paginator
 from rooms import models as room_models
 from . import forms
+from users import mixins
 
 """ DJango의 Class Bases View인 list View를 활용한 페지네이션"""
 
@@ -368,3 +370,48 @@ def search_rooms(request):
         }
     )
 """
+
+
+class UpdateRoomView(mixins.LoggedInOnlyView, UpdateView):
+    model = room_models.Room
+    fields = (
+        "room_name",
+        "description",
+        "country",
+        "city",
+        "price",
+        "address",
+        "beds",
+        "bedrooms",
+        "baths",
+        "guests",
+        "check_in",
+        "check_out",
+        "instant_book",
+        "roomtype",
+        "amenities",
+        "facilities",
+        "houserules",
+    )
+    template_name = "rooms/room_edit.html"
+
+    def get_object(self, queryset=None):
+
+        room = super().get_object(queryset=queryset)
+
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        return room
+
+
+class UpdateRoomPhotos(mixins.LoggedInOnlyView, DetailView):
+    model = room_models.Room
+    template_name = "rooms/update_room_photos.html"
+    
+    def get_object(self, queryset=None):
+
+        room = super().get_object(queryset=queryset)
+
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        return room

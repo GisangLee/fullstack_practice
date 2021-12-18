@@ -154,7 +154,12 @@ class Room(core_models.TimeStampModel):
         photo, = self.photos.all()[:1]
         photo_url = photo.file.url
         return photo_url
-        
+
+    def get_next_four_photos(self):
+        photos = self.photos.all()[1:5]
+        return photos
+
+
 # 룸 사진
 class Photo(core_models.TimeStampModel):
     caption = models.CharField(max_length=100)

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+객실 사진 수정
+{% endblock page_title %}
+
+{% block search_bar %}
+{% endblock search_bar %}
+
+{% block content %}
+    <div class="container sm:w-4/6 mx-auto my-10 flex flex-col">
+        {% for photo in room.photos.all %}
+            <div class="mb-5 p-6 border border-gray-500 rounded-xl flex justify-between">
+                <div class="flex items-start">
+                    <img src="{{photo.file.url}}" class="w-32 h-32"/>
+                    <span class="ml-5 text-lg">{{photo.caption}}</span>
+                </div>
+                <div class="flex flex-col w-1/5">
+                    <a class="btn-link mb-4 bg-teal-500" href="#">수정하기</a>
+                    <a class="btn-link bg-red-600" href="#">삭제하기</a>
+                </div>
+            </div>
+        {% endfor %}     
+    </div>
+{% endblock content %}

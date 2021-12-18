@@ -5,6 +5,15 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.urls.base import reverse_lazy
 
 
+class EmailOnlyView(UserPassesTestMixin):
+
+    def test_func(self):
+        return self.request.user.login_method == "email"
+
+    def handle_no_permission(self):
+        messages.error(self.request, "잘못된 접근입니다.")
+        return redirect("core:home")
+
 class LoggeOutOnlyView(UserPassesTestMixin):
 
     def test_func(self):

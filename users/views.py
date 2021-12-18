@@ -48,6 +48,14 @@ class LoginView(mixins.LoggeOutOnlyView, View):
             }
         )
 
+    def get_success_url(self):
+        next_arg = self.request.GET.get("next")
+
+        if next_arg is not None:
+            return next_arg
+        else:
+            return reverse_lazy("core:home")
+
 
 def log_out(request):
     messages.info(request, "안녕히가세요~")
@@ -281,7 +289,7 @@ class UpdateUserProfile(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView
         return form
 
 
-class UpdatePassword(mixins.LoggedInOnlyView, SuccessMessageMixin, PasswordChangeView):
+class UpdatePassword(mixins.LoggedInOnlyView, mixins.EmailOnlyView, SuccessMessageMixin, PasswordChangeView):
     template_name = "users/update_password.html"
     success_message = "비밀번호 변경 완료"
 
