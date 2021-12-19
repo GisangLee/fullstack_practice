@@ -9,6 +9,9 @@
 
 {% block content %}
     <div class="container sm:w-4/6 mx-auto my-10 flex flex-col">
+        <div class="my-10 w-full">
+            <a href="{% url 'rooms:add_photo' room.pk %}" class="btn-link bg-teal-500 block">사진 업로드</a>
+        </div>
         {% for photo in room.photos.all %}
             <div class="mb-5 p-6 border border-gray-500 rounded-xl flex justify-between">
                 <div class="flex items-start">
@@ -16,10 +19,13 @@
                     <span class="ml-5 text-lg">{{photo.caption}}</span>
                 </div>
                 <div class="flex flex-col w-1/5">
-                    <a class="btn-link mb-4 bg-teal-500" href="#">수정하기</a>
-                    <a class="btn-link bg-red-600" href="#">삭제하기</a>
+                    <a class="btn-link mb-4 bg-teal-500" href="{% url 'rooms:edit_photo' room.pk photo.pk %}">수정하기</a>
+                    <a class="btn-link bg-red-600" href="{% url 'rooms:delete_photo' room.pk photo.pk %}">삭제하기</a>
                 </div>
             </div>
-        {% endfor %}     
+        {% endfor %}
+        <div class="flex justify-center mt-5">
+            <a href="{% url 'rooms:update_room' room.pk %}" class="text-teal-500 font-medium font-2xl">객실 수정하러 돌아가기</a>
+        </div>
     </div>
 {% endblock content %}

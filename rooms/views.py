@@ -4,7 +4,11 @@ from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.views.generic import DetailView, ListView, View, UpdateView
 from django.core.paginator import Paginator
-# from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.urls import reverse
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.edit import FormView
 # from django_countries import countries
 # from django.core.paginator import EmptyPage, Paginator
 from rooms import models as room_models
@@ -415,3 +419,51 @@ class UpdateRoomPhotos(mixins.LoggedInOnlyView, DetailView):
         if room.host.pk != self.request.user.pk:
             raise Http404()
         return room
+
+
+@login_required
+def delete_photo(request, room_pk, photo_pk):
+    user = request.user
+
+    try:
+        room = room_models.Room.objects.get(pk=room_pk)
+        if room.host.pk != user.pk:
+            messages.error(request, "권한이 없습니다.")
+        else:
+            room_models.Photo.objects.filter(pk=photo_pk).delete()
+            messages.success(request, "사진을 삭제했습니다.")
+        return redirect(reverse("rooms:update_photos", kwargs={"pk": room_pk}))
+    except room_models.Room.DoesNotExist:
+        return redirect(reverse("core:home"))
+
+
+class EditPhotoView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
+    model = room_models.Photo
+    template_name = "rooms/edit_photo.html"
+    pk_url_kwarg = "photo_pk"
+    fields = (
+        "caption",
+    )
+    success_message = "사진 수정 완료"
+    
+    def get_success_url(self):
+        room_pk = self.kwargs.get("room_pk")
+        return reverse("rooms:update_photos", kwargs={"pk": room_pk})
+
+
+class AddPhotoView(mixins.LoggedInOnlyView, SuccessMessageMixin, FormView):
+    model = room_models.Photo
+    template_name = "rooms/add_photo.html"
+
+    fields = (
+        "file",
+        "caption",
+    )
+    form_class = forms.CreatePhotoForm
+
+
+    def form_valid(self, form):
+        pk = self.kwargs.get("pk")
+        form.save(pk)
+        messages.success(self.request, "사진 업로드 완료")
+        return redirect(reverse("rooms:update_photos", kwargs={"pk": pk}))
