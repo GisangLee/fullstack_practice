@@ -129,7 +129,37 @@
             {% if room.host == user %}
                 <a href="{% url 'rooms:update_room' room.pk %}" class="btn-link bg-red-500 block">객실 수정하기</a>
             {% else %}
-                <a href="{% url 'rooms:update_room' room.pk %}" class="btn-link bg-teal-500 block">예약하기</a>
+                {% if request.session.is_host %}
+                    
+                    {% for calendar in room.get_calendars %}
+                    <div class="mb-20">
+                        <span class="text-center font-medium text-lg block mb-8">{{calendar.get_month}} / {{calendar.year}}</span>
+                        <div class="cal-grid mb-4">
+                            {% for day in calendar.day_names %}
+                                <span>{{day}}</span>
+                            {% endfor %}       
+                        </div>
+                        <div class="cal-grid">
+                            {% for day in calendar.get_days %}
+                                
+                                {% if day.number != 0 %}
+                                    {% if day.passed %}
+                                        <span class="bg-gray-200 w-full text-center rounded p-1 text-gray-300">
+                                    {% else %}
+                                        <span class="bg-gray-200 w-full text-center rounded text-gray-700 p-1 hover:bg-teal-400 hover:text-white hover:font-bold cursor-pointer">  
+                                    {% endif %}
+                                        {{day}}
+                                        </span>
+                                {% else %}
+                                    <span></span>
+                                {% endif %}
+                                    
+                            {% endfor %}   
+                        </div>
+                    </div>
+                    {% endfor %}
+                        
+                {% endif %}
             {% endif %}
                 
         </div>       

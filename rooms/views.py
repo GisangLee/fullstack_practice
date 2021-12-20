@@ -452,18 +452,25 @@ class EditPhotoView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
 
 
 class AddPhotoView(mixins.LoggedInOnlyView, SuccessMessageMixin, FormView):
-    model = room_models.Photo
     template_name = "rooms/add_photo.html"
-
-    fields = (
-        "file",
-        "caption",
-    )
     form_class = forms.CreatePhotoForm
-
 
     def form_valid(self, form):
         pk = self.kwargs.get("pk")
         form.save(pk)
         messages.success(self.request, "사진 업로드 완료")
         return redirect(reverse("rooms:update_photos", kwargs={"pk": pk}))
+
+
+class CreateRoomView(mixins.LoggedInOnlyView, FormView):
+
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/create_room.html"
+
+    def form_valid(self, form):
+        room = form.save()
+        room.host = self.request.user
+        room.save()
+        form.save_m2m() 
+        messages.success(self.request, "객실 생성 완료")
+        return redirect(reverse("rooms:room_detail", kwargs={"pk": room.pk}))

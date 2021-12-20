@@ -7,6 +7,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import FormView, DetailView, UpdateView
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from . import forms, mixins
@@ -302,3 +303,12 @@ class UpdatePassword(mixins.LoggedInOnlyView, mixins.EmailOnlyView, SuccessMessa
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
+
+
+@login_required
+def become_host(request):
+    try:
+        del request.session["is_host"]
+    except KeyError:
+        request.session["is_host"] = True
+    return redirect(reverse("core:home"))

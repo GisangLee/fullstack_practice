@@ -1,8 +1,11 @@
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.urls import reverse
 from django_countries.fields import CountryField
 from core import models as core_models
 from users import models as user_models
+from cal import Calendar
 
 
 class AbstractItem(core_models.TimeStampModel):
@@ -151,13 +154,32 @@ class Room(core_models.TimeStampModel):
         return 0
     
     def get_first_photo(self):
-        photo, = self.photos.all()[:1]
-        photo_url = photo.file.url
-        return photo_url
+        try:
+            photo, = self.photos.all()[:1]
+            photo_url = photo.file.url
+            return photo_url
+        except ValueError:
+            return None
 
     def get_next_four_photos(self):
         photos = self.photos.all()[1:5]
         return photos
+
+    def get_calendars(self):
+        now = datetime.now()
+        cur_year = now.year
+        cur_month = now.month
+
+        next_year = now + relativedelta(years=1)
+        next_year = next_year.date().year
+
+        next_month = now + relativedelta(months=1)
+        next_month = next_month.date().month
+
+
+        cur_month_cal = Calendar(cur_year, cur_month)
+        next_month_cal = Calendar(next_year, next_month)
+        return [cur_month_cal, next_month_cal]
 
 
 # 룸 사진

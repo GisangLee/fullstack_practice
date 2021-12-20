@@ -1,6 +1,20 @@
 <ul class="flex items-center text-sm font-semibold h-full">
   {% if user.is_authenticated %}
     <li class="nav_link">
+      <a href="{% url 'users:become_host' %}">
+        {% if request.session.is_host %}
+          게스트 모드로 전환하기
+        {% else %}
+          호스트 모드로 전환하기
+        {% endif %}
+      </a>
+    </li>
+    {% if request.session.is_host %}
+      <li class="nav_link">
+        <a href="{% url 'rooms:create_room' %}">객실 추가하기</a>
+      </li>
+    {% endif %}
+    <li class="nav_link">
       <a href="{{user.get_absolute_url}}">프로필</a>
     </li>
     <li class="nav_link">
